@@ -64,8 +64,7 @@ function showDialogAdd() {
 
 function savingChanges() {
 
-    console.log("Your items have been added");
-    $('#datatable tr:last').after('<tr><td>' + "Your Items have been added");
+
 
     var v1 = $('#firstName').val();
     var v2 = $('#lastName').val();
@@ -78,12 +77,16 @@ function savingChanges() {
     var reg = /^[\w'\-,.][^0-9_!¡?÷?¿/\\+=@#$%ˆ&*(){}|~<>;:[\]]{2,}$/;
     var reg1 = /^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/im;
     var reg2 = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-
+    var date = /^(0[1-9]|1[0-2])\/(0[1-9]|1\d|2\d|3[01])\/(19|20)\d{2}$/;
     // Test the regular expression to see if there is a match
+
+    var isValid = true;
+
     if (reg.test(v1)) {
         $('#firstName').addClass("is-valid");
         $('#firstName').removeClass("is-invalid");
     } else {
+        isValid = false;
         $('#firstName').removeClass("is-valid");
         $('#firstName').addClass("is-invalid");
     }
@@ -92,30 +95,33 @@ function savingChanges() {
         $('#lastName').addClass("is-valid");
         $('#lastName').removeClass("is-invalid");
     } else {
+        isValid = false;
         $('#lastName').removeClass("is-valid");
         $('#lastName').addClass("is-invalid");
     }
 
-    if (reg.test(v3)) {
-        $('#Identification').addClass("is-valid");
-        $('#Identification').removeClass("is-invalid");
-    } else {
-        $('#Identification').removeClass("is-valid");
-        $('#Identification').addClass("is-invalid");
-    }
+    //if (reg.test(v3)) {
+        //$('#Identification').addClass("is-valid");
+        //$('#Identification').removeClass("is-invalid");
+    //} else {
+        //$('#Identification').removeClass("is-valid");
+        //$('#Identification').addClass("is-invalid");
+    //}
 
     if (reg2.test(v4)) {
         $('#email').addClass("is-valid");
         $('#email').removeClass("is-invalid");
     } else {
+        isValid = false;
         $('#email').removeClass("is-valid");
         $('#email').addClass("is-invalid");
     }
 
-    if (reg.test(v5)) {
+    if (date.test(v5)) {
         $('#birthday').addClass("is-valid");
         $('#birthday').removeClass("is-invalid");
     } else {
+        isValid = false;
         $('#birthday').removeClass("is-valid");
         $('#birthday').addClass("is-invalid");
     }
@@ -124,9 +130,20 @@ function savingChanges() {
         $('#phone').addClass("is-valid");
         $('#phone').removeClass("is-invalid");
     } else {
+        isValid = false;
         $('#phone').removeClass("is-valid");
         $('#phone').addClass("is-invalid");
     }
+
+    if(isValid == true)
+    {
+        console.log("Your items have been added");
+        $('#datatable tr:last').after('<tr><td>' + "Your Items have been added");
+    } else {
+        console.log("Invalid");
+        $('#datatable tr:last').after('<tr><td>' + "Invalid field name");
+    }
+
 }
 
 var addItemButton = $('#addItem');

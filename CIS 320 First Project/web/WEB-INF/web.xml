@@ -15,14 +15,31 @@
     </servlet-mapping>
 
     <servlet>
-        <servlet-name>FormTestServlet</servlet-name>
-        <servlet-class>edu.simpson.dille.FormTestServlet</servlet-class>
+    <servlet-name>FormTestServlet</servlet-name>
+    <servlet-class>edu.simpson.dille.FormTestServlet</servlet-class>
     </servlet>
 
     <servlet-mapping>
         <servlet-name>FormTestServlet</servlet-name>
         <url-pattern>/api/form_test_servlet</url-pattern>
     </servlet-mapping>
+
+
+
+
+    <servlet>
+        <servlet-name>NameListEdit</servlet-name>
+        <servlet-class>edu.simpson.dille.NameListEdit</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>NameListEdit</servlet-name>
+        <url-pattern>/api/name_list_edit</url-pattern>
+    </servlet-mapping>
+
+
+
+
 
     <servlet>
         <servlet-name>FormTestJSONServlet</servlet-name>
