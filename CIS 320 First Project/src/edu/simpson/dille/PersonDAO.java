@@ -18,6 +18,7 @@ public class PersonDAO {
 
     /**
      * Get a list of the people in the database.
+     *
      * @return Returns a list of instances of the People class.
      */
     public static List<Person> getPeople() {
@@ -52,7 +53,7 @@ public class PersonDAO {
             rs = stmt.executeQuery();
 
             // Loop through each record
-            while(rs.next()) {
+            while (rs.next()) {
                 // Create a new instance of the Person object.
                 // You'll need to define that somewhere. Just a simple class with getters and setters on the
                 // fields.
@@ -64,23 +65,72 @@ public class PersonDAO {
                 person.setLast(rs.getString("last"));
                 person.setEmail(rs.getString("email"));
                 person.setPhone(rs.getString("phone"));
-                person.setBirthday(rs.getInt("birthday"));
+                person.setBirthday(rs.getString("birthday"));
 
                 // Add this person to the list so we can return it.
                 list.add(person);
             }
         } catch (SQLException se) {
-            log.log(Level.SEVERE, "SQL Error", se );
+            log.log(Level.SEVERE, "SQL Error", se);
         } catch (Exception e) {
-            log.log(Level.SEVERE, "Error", e );
+            log.log(Level.SEVERE, "Error", e);
         } finally {
             // Ok, close our result set, statement, and connection
-            try { rs.close(); } catch (Exception e) { log.log(Level.SEVERE, "Error", e ); }
-            try { stmt.close(); } catch (Exception e) { log.log(Level.SEVERE, "Error", e ); }
-            try { conn.close(); } catch (Exception e) { log.log(Level.SEVERE, "Error", e ); }
+            try {
+                rs.close();
+            } catch (Exception e) {
+                log.log(Level.SEVERE, "Error", e);
+            }
+            try {
+                stmt.close();
+            } catch (Exception e) {
+                log.log(Level.SEVERE, "Error", e);
+            }
+            try {
+                conn.close();
+            } catch (Exception e) {
+                log.log(Level.SEVERE, "Error", e);
+            }
         }
         // Done! Return the results
         return list;
     }
 
+    public static void addPerson(Person person) {
+
+        Connection conn = null;
+        PreparedStatement stmt = null;
+
+        try {
+            // Get our database connection
+            conn = DBHelper.getConnection();
+            String sql = "INSERT INTO person (first, last, email, phone, birthday) VALUES (?, ?, ?, ?, ?);";
+            stmt = conn.prepareStatement(sql);
+            stmt.setString(1, person.getFirst());
+            stmt.setString(2, person.getLast());
+            stmt.setString(3, person.getEmail());
+            stmt.setString(4, person.getPhone());
+            stmt.setString(5, person.getBirthday());
+            stmt.execute();
+        } catch (SQLException se) {
+            log.log(Level.SEVERE, "SQL Error", se);
+            System.out.println("KSDJKFJDS");
+        } catch (Exception e) {
+            log.log(Level.SEVERE, "Error", e);
+            System.out.println("KSDJKFJDS2");
+        } finally {
+            try {
+                stmt.close();
+            } catch (Exception e) {
+                log.log(Level.SEVERE, "Error", e);
+            }
+            try {
+                conn.close();
+            } catch (Exception e) {
+                log.log(Level.SEVERE, "Error", e);
+            }
+
+        }
+
+    }
 }

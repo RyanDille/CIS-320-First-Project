@@ -7,7 +7,7 @@ public class Person {
     private String last;
     private String phone;
     private String email;
-    private int birthday;
+    private String birthday;
 
 
     public int getId() {return id; }
@@ -25,7 +25,7 @@ public class Person {
     public String getPhone() {return phone; }
     public void setPhone(String phone) { this.phone = phone; }
 
-    public int getBirthday() {return birthday; }
-    public void setBirthday(int birthday) { this.birthday = birthday; }
+    public String getBirthday() {return birthday; }
+    public void setBirthday(String birthday) { this.birthday = birthday; }
 
 }

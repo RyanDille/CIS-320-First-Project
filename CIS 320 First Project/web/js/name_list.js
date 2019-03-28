@@ -4,11 +4,10 @@ console.log("hi");
 function updateTable() {
 
     var url = "api/name_list_get";
+    $('#datatable tbody').html("");
 
     $.getJSON(url, null, function(json_result) {
-            // json_result is an object. You can set a breakpoint, or print
-            // it to see the fields. Specifically, it is an array of objects.
-            // Here we loop the array and print the first name.
+
             for (var i = 0; i < json_result.length; i++) {
 
                 var phone = json_result[i].phone.substring(0,3) + "-" + json_result[i].phone.substring(3,6) + "-" +
@@ -20,9 +19,10 @@ function updateTable() {
                     + phone + '</td><td>'
                     + json_result[i].email + '</td><td>'
                     + json_result[i].birthday + '</td></tr>');
-
-
             }
+
+            var buttons = $(".deleteButton");
+            buttons.on("click", deleteItem);
             console.log("Done");
         }
     );
@@ -30,6 +30,14 @@ function updateTable() {
 }
 
 updateTable();
+
+function deleteItem(e) {
+    console.debug("Delete");
+    console.debug(e.target.value);
+    console.log("Deleted Items");
+}
+
+
 
 // Called when "Add Item" button is clicked
 function showDialogAdd() {
@@ -62,9 +70,28 @@ function showDialogAdd() {
     $('#myModal').modal('show');
 }
 
+function jqueryPostJSONButtonAction() {
+
+    var url = "api/name_list_edit";
+    var myFieldValue = $("#jqueryPostJSONField").val();
+    var dataToServer = {firstName: myFieldValue};
+
+    $.ajax({
+        type: 'POST',
+        url: url,
+        data: JSON.stringify(dataToServer),
+        success: function(dataFromServer) {
+            console.log(dataFromServer);
+        },
+        contentType: "application/json",
+        dataType: 'text' // Could be JSON or whatever too
+    });
+}
+
+
+
+
 function savingChanges() {
-
-
 
     var v1 = $('#firstName').val();
     var v2 = $('#lastName').val();
@@ -77,7 +104,7 @@ function savingChanges() {
     var reg = /^[\w'\-,.][^0-9_!¡?÷?¿/\\+=@#$%ˆ&*(){}|~<>;:[\]]{2,}$/;
     var reg1 = /^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/im;
     var reg2 = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-    var date = /^(0[1-9]|1[0-2])\/(0[1-9]|1\d|2\d|3[01])\/(19|20)\d{2}$/;
+    var date = /^\d{4}-\d{2}-\d{2}$/;
     // Test the regular expression to see if there is a match
 
     var isValid = true;
@@ -99,14 +126,6 @@ function savingChanges() {
         $('#lastName').removeClass("is-valid");
         $('#lastName').addClass("is-invalid");
     }
-
-    //if (reg.test(v3)) {
-        //$('#Identification').addClass("is-valid");
-        //$('#Identification').removeClass("is-invalid");
-    //} else {
-        //$('#Identification').removeClass("is-valid");
-        //$('#Identification').addClass("is-invalid");
-    //}
 
     if (reg2.test(v4)) {
         $('#email').addClass("is-valid");
@@ -137,20 +156,41 @@ function savingChanges() {
 
     if(isValid == true)
     {
+        var url = "api/name_list_edit";
+        var dataToServer = {first: v1, last : v2, email : v4, phone : v6, birthday : v5};
+
+        $.ajax({
+            type: 'POST',
+            url: url,
+            data: JSON.stringify(dataToServer),
+            success: function(dataFromServer) {
+                console.log(dataFromServer);
+                updateTable();
+            },
+            contentType: "application/json",
+            dataType: 'text' // Could be JSON or whatever too
+        });
+
         console.log("Your items have been added");
-        $('#datatable tr:last').after('<tr><td>' + "Your Items have been added");
     } else {
         console.log("Invalid");
-        $('#datatable tr:last').after('<tr><td>' + "Invalid field name");
     }
 
 }
+
+
 
 var addItemButton = $('#addItem');
 addItemButton.on("click", showDialogAdd);
 
 var saveChangesButton = $('#saveChanges');
 saveChangesButton.on("click", savingChanges);
+
+var buttons = $(".deleteButton");
+buttons.on("click", deleteItem);
+
+var jqueryPostJSONButton = $('#jqueryPostJSONButton');
+jqueryPostJSONButton.on("click", jqueryPostJSONButtonAction);
 
 
 

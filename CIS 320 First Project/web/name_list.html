@@ -39,27 +39,6 @@
 
 
 
-
-
-
-
-
-<form action="api/name_list_edit" method="get">
-    <form action="javascript:void(0);">
-        <input id="jqueryPostJSONField" name="fieldName" type="text" />
-        <button id="jqueryPostJSONButton">Submit</button>
-    </form>
-
-
-
-
-
-
-
-
-
-
-
 <div class="container">
     <h1>Name List</h1><button type="button" id="addItem" class="btn btn-primary">Add new item</button>
     <table id="datatable" class="table table-hover">
@@ -102,6 +81,11 @@
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button> <button id="saveChanges" type=
                     "button" class="btn btn-primary">Save changes</button>
             </div>
+
+
+            <td><button type='button' name='delete' class='editButton btn' value='" + id + "'>Delete</button></td>.
+
+
         </div><!-- /.modal-content -->
     </div><!-- /.modal-dialog -->
 </div><!-- /.modal -->
