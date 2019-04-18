@@ -18,12 +18,8 @@ function updateTable() {
                     + json_result[i].last + '</td><td>'
                     + phone + '</td><td>'
                     + json_result[i].email + '</td><td>'
-                    + json_result[i].birthday + '</td></tr>');
+                    + json_result[i].birthday + '</td><td><button type=\'button\' name=\'delete\' class=\'deleteButton btn\' value=\'' + json_result[i].id + '\'>Delete</button></td>.</tr>');
             }
-
-            var buttons = $(".deleteButton");
-            buttons.on("click", deleteItem);
-            console.log("Done");
         }
     );
 
@@ -32,10 +28,29 @@ function updateTable() {
 updateTable();
 
 function deleteItem(e) {
+
+    var url = "api/name_list_delete";
+    var id = e.target.value;
+    console.log(id);
+
+    $.ajax({
+        type: 'POST',
+        url: url,
+        data: id,
+        success: [function(dataFromServer) {
+            console.log(dataFromServer);
+            updateTable();
+        }],
+        contentType: "application/json",
+        dataType: 'text' // Could be JSON or whatever too
+    });
     console.debug("Delete");
     console.debug(e.target.value);
     console.log("Deleted Items");
 }
+
+$(document).on("click",".deleteButton", deleteItem);
+console.log("Done");
 
 
 

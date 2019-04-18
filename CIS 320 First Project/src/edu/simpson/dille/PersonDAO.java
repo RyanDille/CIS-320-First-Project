@@ -96,6 +96,40 @@ public class PersonDAO {
         return list;
     }
 
+    public static void deletePerson(int id) {
+
+        Connection conn = null;
+        PreparedStatement stmt = null;
+
+        try {
+            // Get our database connection
+            conn = DBHelper.getConnection();
+            String sql = "DELETE FROM person WHERE id = ?;";
+            stmt = conn.prepareStatement(sql);
+            stmt.setInt(1, id);
+            stmt.execute();
+            System.out.println("HI");
+
+        } catch (SQLException se) {
+            log.log(Level.SEVERE, "SQL Error", se);
+            System.out.println("KSDJKFJDS");
+        } catch (Exception e) {
+            log.log(Level.SEVERE, "Error", e);
+            System.out.println("KSDJKFJDS2");
+        } finally {
+            try {
+                stmt.close();
+            } catch (Exception e) {
+                log.log(Level.SEVERE, "Error", e);
+            }
+            try {
+                conn.close();
+            } catch (Exception e) {
+                log.log(Level.SEVERE, "Error", e);
+            }
+        }
+    }
+
     public static void addPerson(Person person) {
 
         Connection conn = null;

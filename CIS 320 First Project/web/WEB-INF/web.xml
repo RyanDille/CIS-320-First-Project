@@ -39,6 +39,16 @@
 
 
 
+    <servlet>
+        <servlet-name>NameListDelete</servlet-name>
+        <servlet-class>edu.simpson.dille.NameListDelete</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>NameListDelete</servlet-name>
+        <url-pattern>/api/name_list_delete</url-pattern>
+    </servlet-mapping>
+
 
 
     <servlet>
