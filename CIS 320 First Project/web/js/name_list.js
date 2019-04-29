@@ -8,7 +8,18 @@ function updateTable() {
 
     $.getJSON(url, null, function(json_result) {
 
-            for (var i = 0; i < json_result.length; i++) {
+        var phone = json_result[0].phone.substring(0,3) + "-" + json_result[0].phone.substring(3,6) + "-" +
+            json_result[0].phone.substring(6,10);
+
+        $('#datatable tbody').html('<tr><td>' + json_result[0].id + '</td><td>'
+            + json_result[0].first + '</td><td>'
+            + json_result[0].last + '</td><td>'
+            + phone + '</td><td>'
+            + json_result[0].email + '</td><td>'
+            + json_result[0].birthday + '</td><td><button type=\'button\' name=\'delete\' class=\'deleteButton btn\' value=\''
+            + json_result[0].id + '\'>Delete</button></td>.</tr>');
+
+            for (var i = 1; i < json_result.length; i++) {
 
                 var phone = json_result[i].phone.substring(0,3) + "-" + json_result[i].phone.substring(3,6) + "-" +
                     json_result[i].phone.substring(6,10);
@@ -18,11 +29,11 @@ function updateTable() {
                     + json_result[i].last + '</td><td>'
                     + phone + '</td><td>'
                     + json_result[i].email + '</td><td>'
-                    + json_result[i].birthday + '</td><td><button type=\'button\' name=\'delete\' class=\'deleteButton btn\' value=\'' + json_result[i].id + '\'>Delete</button></td>.</tr>');
+                    + json_result[i].birthday + '</td><td><button type=\'button\' name=\'delete\' class=\'deleteButton btn\' value=\''
+                    + json_result[i].id + '\'>Delete</button></td>.</tr>');
             }
         }
     );
-
 }
 
 updateTable();
@@ -51,8 +62,6 @@ function deleteItem(e) {
 
 $(document).on("click",".deleteButton", deleteItem);
 console.log("Done");
-
-
 
 // Called when "Add Item" button is clicked
 function showDialogAdd() {
@@ -103,9 +112,6 @@ function jqueryPostJSONButtonAction() {
     });
 }
 
-
-
-
 function savingChanges() {
 
     var v1 = $('#firstName').val();
@@ -116,7 +122,7 @@ function savingChanges() {
     var v6 = $('#phone').val();
 
     // Create the regular expression
-    var reg = /^[\w'\-,.][^0-9_!¡?÷?¿/\\+=@#$%ˆ&*(){}|~<>;:[\]]{2,}$/;
+    var reg = /^[a-zA-Z]+$/;
     var reg1 = /^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/im;
     var reg2 = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
     var date = /^\d{4}-\d{2}-\d{2}$/;
@@ -192,8 +198,6 @@ function savingChanges() {
     }
 
 }
-
-
 
 var addItemButton = $('#addItem');
 addItemButton.on("click", showDialogAdd);

@@ -13,7 +13,8 @@ import java.util.regex.Pattern;
 @WebServlet(name = "NameListEdit")
 public class NameListEdit extends HttpServlet {
 
-    private Pattern firstAndLast;
+    private Pattern first;
+    private Pattern last;
     private Pattern phone;
     private Pattern email;
     private Pattern birthday;
@@ -22,13 +23,14 @@ public class NameListEdit extends HttpServlet {
      */
     public NameListEdit() {
 
-        String test = ("^[\\w'\\-,.][^0-9_!¡?÷?¿/\\+=@#$%ˆ&*(){}|~<>;:[\\\\]]{2,}$");
+        String test = ("^[\\w'\\-,.][^0-9_!¡?÷?¿/\\\\+=@#$%ˆ&*(){}|~<>;:[\\]]{2,}$");
 
         // --- Compile and set up all the regular expression patterns here ---
-        firstAndLast = Pattern.compile(test);
+        first = Pattern.compile("^[a-zA-Z]+$");
+        last = Pattern.compile("^[a-zA-Z]+$");
         phone = Pattern.compile("^[\\+]?[(]?[0-9]{3}[)]?[-\\s\\.]?[0-9]{3}[-\\s\\.]?[0-9]{4,6}$");
-        email = Pattern.compile("^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@((\\[[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\])|(([a-zA-Z\\-0-9]+\\.)+[a-zA-Z]{2,}))$");
-        birthday = Pattern.compile("^(0[1-9]|1[0-2])\\/(0[1-9]|1\\d|2\\d|3[01])\\/(19|20)\\d{2}$");
+        email = Pattern.compile("^(([^<>()\\[\\]\\\\.,;:\\s@\"]+(\\.[^<>()\\[\\]\\\\.,;:\\s@\"]+)*)|(\".+\"))@((\\[[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\])|(([a-zA-Z\\-0-9]+\\.)+[a-zA-Z]{2,}))$");
+        birthday = Pattern.compile("^\\d{4}-\\d{2}-\\d{2}$");
     }
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
@@ -38,7 +40,11 @@ public class NameListEdit extends HttpServlet {
 
         Gson gson = new Gson();
         Person fromJson = gson.fromJson(requestString, Person.class);
-        PersonDAO.addPerson(fromJson);
+
+        if (first.matcher(fromJson.getFirst()).find() && last.matcher(fromJson.getLast()).find() &&
+                phone.matcher(fromJson.getPhone()).find() && email.matcher(fromJson.getEmail()).find() &&
+                birthday.matcher(fromJson.getBirthday()).find())
+                PersonDAO.addPerson(fromJson);
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
