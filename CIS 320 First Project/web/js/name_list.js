@@ -17,26 +17,55 @@ function updateTable() {
             + phone + '</td><td>'
             + json_result[0].email + '</td><td>'
             + json_result[0].birthday + '</td><td><button type=\'button\' name=\'delete\' class=\'deleteButton btn\' value=\''
-            + json_result[0].id + '\'>Delete</button></td>.</tr>');
+            + json_result[0].id + '\'>Delete</button></td>'
+            + '<td><button type=\'button\' name=\'edit\' class=\'editButton btn\' value=\''
+            + json_result[0].id + '\'>Edit</button></td>.</tr>');
 
-            for (var i = 1; i < json_result.length; i++) {
 
-                var phone = json_result[i].phone.substring(0,3) + "-" + json_result[i].phone.substring(3,6) + "-" +
-                    json_result[i].phone.substring(6,10);
+        for (var i = 1; i < json_result.length; i++) {
 
-                $('#datatable tr:last').after('<tr><td>' + json_result[i].id + '</td><td>'
-                    + json_result[i].first + '</td><td>'
-                    + json_result[i].last + '</td><td>'
-                    + phone + '</td><td>'
-                    + json_result[i].email + '</td><td>'
-                    + json_result[i].birthday + '</td><td><button type=\'button\' name=\'delete\' class=\'deleteButton btn\' value=\''
-                    + json_result[i].id + '\'>Delete</button></td>.</tr>');
+            var phone = json_result[i].phone.substring(0,3) + "-" + json_result[i].phone.substring(3,6) + "-" +
+                json_result[i].phone.substring(6,10);
+
+            $('#datatable tr:last').after('<tr><td>' + json_result[i].id + '</td><td>'
+                + json_result[i].first + '</td><td>'
+                + json_result[i].last + '</td><td>'
+                + phone + '</td><td>'
+                + json_result[i].email + '</td><td>' +
+                + json_result[i].birthday + '</td><td><button type=\'button\' name=\'delete\' class=\'deleteButton btn\' value=\''
+                + json_result[i].id + '\'>Delete</button></td>'
+                + '<td><button type=\'button\' name=\'edit\' class=\'editButton btn\' value=\''
+                + json_result[i].id + '\'>Edit</button></td>.</tr>');
+
+                var buttons = $(".editButton");
+                buttons.on("click", editItem);
             }
         }
     );
 }
 
 updateTable();
+
+function editItem(e) {
+    console.debug("Edit");
+    console.debug(e.target.value);
+    console.log("HIIII")
+    var id = e.target.value;
+    //var id = e.target.parentNode.parentNode.querySelectorAll("td")[0].innerHTML;
+    var firstName1 = e.target.parentNode.parentNode.querySelectorAll("td")[1].innerHTML;
+    var lastName1 = e.target.parentNode.parentNode.querySelectorAll("td")[2].innerHTML;
+    var email1 = e.target.parentNode.parentNode.querySelectorAll("td")[4].innerHTML;
+    var phone1 = e.target.parentNode.parentNode.querySelectorAll("td")[3].innerHTML;
+    var birthday1 = e.target.parentNode.parentNode.querySelectorAll("td")[5].innerHTML;
+
+    $('#id').val(id); // Yes, now we set and use the hidden ID field
+    $('#firstName').val(firstName1);
+    $('#lastName').val(lastName1);
+    $('#email').val(email1);
+    $('#phone').val(phone1);
+    $('#birthday').val(birthday1);
+    $('#myModal').modal('show');
+}
 
 function deleteItem(e) {
 
@@ -97,8 +126,36 @@ function showDialogAdd() {
 function jqueryPostJSONButtonAction() {
 
     var url = "api/name_list_edit";
-    var myFieldValue = $("#jqueryPostJSONField").val();
-    var dataToServer = {firstName: myFieldValue};
+    var idField = $("#id").val();
+    var firstNameField = $("#firstName").val();
+    var lastNameField = $("#lastName").val();
+    var emailField = $("#email").val();
+    var phoneField = $("#phone").val();
+    var birthdayField = $("#birthday").val();
+    var dataToServer;
+    console.log(idField);
+
+    if(idField) {
+        dataToServer = {
+            id: idField,
+            first: firstNameField,
+            last: lastNameField,
+            email: emailField,
+            phone: phoneField,
+            birthday: birthdayField
+        };
+    }
+    else {
+        dataToServer = {
+            first: firstNameField,
+            last: lastNameField,
+            email: emailField,
+            phone: phoneField,
+            birthday: birthdayField
+        };
+    }
+    //var myFieldValue = $("#jqueryPostJSONField").val();
+    //var dataToServer = {firstName: myFieldValue};
 
     $.ajax({
         type: 'POST',
@@ -116,7 +173,7 @@ function savingChanges() {
 
     var v1 = $('#firstName').val();
     var v2 = $('#lastName').val();
-    var v3 = $('#Identification').val();
+    var v3 = $('#id').val();
     var v4 = $('#email').val();
     var v5 = $('#birthday').val();
     var v6 = $('#phone').val();
@@ -178,7 +235,25 @@ function savingChanges() {
     if(isValid == true)
     {
         var url = "api/name_list_edit";
-        var dataToServer = {first: v1, last : v2, email : v4, phone : v6, birthday : v5};
+        if(v3) {
+            dataToServer = {
+                id: v3,
+                first: v1,
+                last: v2,
+                email: v4,
+                phone: v6,
+                birthday: v5
+            };
+        }
+        else {
+            dataToServer = {
+                first: v1,
+                last: v2,
+                email: v4,
+                phone: v6,
+                birthday: v5
+            };
+        }
 
         $.ajax({
             type: 'POST',

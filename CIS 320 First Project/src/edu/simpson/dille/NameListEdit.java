@@ -34,17 +34,31 @@ public class NameListEdit extends HttpServlet {
     }
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
+        boolean done = false;
         java.io.BufferedReader in = request.getReader();
         String requestString = new String();
-        for (String line; (line = in.readLine()) != null; requestString += line);
+        for (String line; (line = in.readLine()) != null; requestString += line) {
+            if (line.contains("id")) {
+                done = true;
+            }
+
+        };
 
         Gson gson = new Gson();
         Person fromJson = gson.fromJson(requestString, Person.class);
 
         if (first.matcher(fromJson.getFirst()).find() && last.matcher(fromJson.getLast()).find() &&
                 phone.matcher(fromJson.getPhone()).find() && email.matcher(fromJson.getEmail()).find() &&
-                birthday.matcher(fromJson.getBirthday()).find())
+                birthday.matcher(fromJson.getBirthday()).find()) {
+            System.out.println(done);
+            if (done) {
+                PersonDAO.editPerson(fromJson);
+            }
+            else {
                 PersonDAO.addPerson(fromJson);
+            }
+        }
+
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
